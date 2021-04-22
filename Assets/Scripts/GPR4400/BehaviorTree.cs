@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.PlayerLoop;
@@ -11,8 +13,14 @@ namespace bt
         Init,
         Success,
         Failure,
-        Running,
-        Error
+        Running
+    }
+
+    public class BehaviorException : Exception
+    {
+        public BehaviorException(string msg) : base(msg)
+        { 
+        }
     }
     public abstract class Behavior
     {
@@ -25,9 +33,15 @@ namespace bt
 
         protected void InitIfNeeded()
         {
-            if (Status == Status.Init)
+            switch (Status)
             {
-                Init();
+                case Status.Init:
+                    Init();
+                    break;
+                case Status.Failure:
+                case Status.Success:
+                    throw new BehaviorException(
+                        "Do not call finished behavior");
             }
         }
         /**
@@ -62,9 +76,11 @@ namespace bt
             switch (status)
             {
                 case Status.Failure:
-                    return Status.Success;
+                    Status = Status.Success;
+                    return Status;
                 case Status.Success:
-                    return Status.Failure;
+                    Status = Status.Failure;
+                    return Status;
             }
             return status;
         }
@@ -78,11 +94,11 @@ namespace bt
             var status = child_.Update();
             switch (status)
             {
-                case Status.Error:
                 case Status.Running:
                     return status;
             }
-            return Status.Success;
+            Status = Status.Success;
+            return Status;
         }
     }
 
@@ -102,11 +118,34 @@ namespace bt
             return status;
         }
     }
+
+    public class RepeatUntilFail : Decorator
+    {
+        public override Status Update()
+        {
+            InitIfNeeded();
+            var status = child_.Update();
+            switch (status)
+            {
+                case Status.Failure:
+                    Status = Status.Success;
+                    return Status;
+                case Status.Success:
+                    Status = Status.Init;
+                    break;
+            }
+            return status;
+        }
+    }
     
     public abstract class Composite : Behavior
     {
         protected Behavior[] children_;
-        public Behavior[] Children => children_;
+        public Behavior[] Children
+        {
+            get => children_;
+            set => children_ = value;
+        }
 
         public override void Init()
         {
@@ -125,12 +164,18 @@ namespace bt
             InitIfNeeded();
             foreach (var child in children_)
             {
+                switch (child.Status)
+                {
+                    case Status.Success:
+                        continue;
+                }
                 var status = child.Update();
                 switch (status)
                 {
                     case Status.Running:
-                    case Status.Error:
+                        return Status.Running;
                     case Status.Failure:
+                        Status = status;
                         return status;
                 }
             }
@@ -146,12 +191,18 @@ namespace bt
             InitIfNeeded();
             foreach (var child in children_)
             {
+                switch (child.Status)
+                {
+                    case Status.Failure:
+                        continue;
+                }
                 var status = child.Update();
                 switch (status)
                 {
                     case Status.Running:
-                    case Status.Error:
+                        return Status.Running;
                     case Status.Success:
+                        Status = status;
                         return status;
                 }
             }
