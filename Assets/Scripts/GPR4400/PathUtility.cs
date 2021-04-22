@@ -29,8 +29,6 @@ namespace path
         }
         
     }
-
-    
     /**
      * <summary>Bidirectional graph</summary> 
      */
@@ -56,6 +54,11 @@ namespace path
             {
                 nodes_[node2].neighbors.Add(new Neighbor(node1, distance));
             }
+        }
+ 
+        public void Clear()
+        {
+            nodes_.Clear();
         }
         /**
          * <summary>Calculate the shortest path from the startNode to the destinationNode.

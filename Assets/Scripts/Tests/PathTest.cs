@@ -7,11 +7,9 @@ using UnityEngine.TestTools;
 
 public class PathTest
 {
-    // A Test behaves as an ordinary method
     [Test]
     public void StraightLineTest()
     {
-        // Use the Assert class to test conditions
         Graph graph = new Graph();
         graph.AddNode(new Vector2(0, 0));
         graph.AddNode(new Vector2(1, 0));
