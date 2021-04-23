@@ -16,7 +16,9 @@ namespace path
             this.length = length;
         }
     }
-    /// <summary>Simple node struct used for pathfinding</summary>
+    /** 
+     * <summary>Simple node struct used for pathfinding</summary>
+     */
     public struct Node
     {
         public Vector2 position;
