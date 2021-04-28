@@ -115,7 +115,7 @@ namespace bt
                     Status = Status.Init;
                     break;
             }
-            return status;
+            return Status.Running;
         }
     }
 

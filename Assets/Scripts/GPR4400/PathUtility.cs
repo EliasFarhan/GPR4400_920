@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Priority_Queue;
@@ -36,12 +37,25 @@ namespace path
      */
     public class Graph
     {
+        public struct QueryInfo
+        {
+            public int nodeTraversedCount;
+            public QueryInfo(int nodeTraversedCount)
+            {
+                this.nodeTraversedCount = nodeTraversedCount;
+            }
+            
+        }
         private List<Node> nodes_ = new List<Node>();
+        private QueryInfo lastQueryInfo_ = new QueryInfo(0);
+        public QueryInfo LastQueryInfo => lastQueryInfo_;
+
+        public List<Node> Nodes => nodes_;
 
         public int AddNode(Vector2 position)
         {
-            int index = nodes_.Count;
-            nodes_.Add(new Node(position));
+            int index = Nodes.Count;
+            Nodes.Add(new Node(position));
             return index;
         }
         /**
@@ -50,17 +64,17 @@ namespace path
          */
         public void AddNeighborEdge(int node1, int node2, bool bidirectional=false)
         {
-            var distance = (nodes_[node2].position - nodes_[node1].position).magnitude;
-            nodes_[node1].neighbors.Add(new Neighbor(node2, distance));
+            var distance = (Nodes[node2].position - Nodes[node1].position).magnitude;
+            Nodes[node1].neighbors.Add(new Neighbor(node2, distance));
             if (bidirectional)
             {
-                nodes_[node2].neighbors.Add(new Neighbor(node1, distance));
+                Nodes[node2].neighbors.Add(new Neighbor(node1, distance));
             }
         }
  
         public void Clear()
         {
-            nodes_.Clear();
+            Nodes.Clear();
         }
         /**
          * <summary>Calculate the shortest path from the startNode to the destinationNode.
@@ -69,26 +83,40 @@ namespace path
         public List<int> CalculatePath(int startNode, int destinationNode)
         {
             var path = new List<int>();
-            Dictionary<int, int> cameFrom = new Dictionary<int, int> {[startNode] = -1};
-            Dictionary<int, float> costSoFar = new Dictionary<int, float> {[startNode] = 0};
+            lastQueryInfo_.nodeTraversedCount = 0;
+            if (destinationNode < 0 || destinationNode >= Nodes.Count)
+            {
+                return path;
+            }
+
+            if (startNode < 0 || startNode >= Nodes.Count)
+            {
+                return path;
+            }
+            var cameFrom = new int[Nodes.Count];
+            cameFrom.Fill(-1);
+            var costSoFar = new float[Nodes.Count];
+            costSoFar.Fill(-1.0f);
+            costSoFar[startNode] = 0.0f;
             SimplePriorityQueue<int> frontier = new SimplePriorityQueue<int>();
             frontier.Enqueue(startNode, 0.0f);
-            var destinationPosition = nodes_[destinationNode].position;
+            var destinationPosition = Nodes[destinationNode].position;
+            int nodeTraversedCount = 0;
             while (frontier.Count > 0)
             {
+                nodeTraversedCount++;
                 var currentNode = frontier.Dequeue();
                 if (currentNode == destinationNode)
                 {
                     break;
                 }
-                foreach (var neighbor in nodes_[currentNode].neighbors)
+                foreach (var neighbor in Nodes[currentNode].neighbors)
                 {
                     var newCost = costSoFar[currentNode] + neighbor.length;
-                    if (costSoFar.ContainsKey(neighbor.neighbor) && 
+                    if (!(costSoFar[neighbor.neighbor] < 0.0f) && 
                         !(newCost < costSoFar[neighbor.neighbor])) continue;
-                    
                     costSoFar[neighbor.neighbor] = newCost;
-                    var priority = newCost + (destinationPosition - nodes_[neighbor.neighbor].position).magnitude;
+                    var priority = newCost + (destinationPosition - Nodes[neighbor.neighbor].position).magnitude;
                     if (frontier.Contains(neighbor.neighbor))
                     {
                         frontier.UpdatePriority(neighbor.neighbor, priority);
@@ -102,7 +130,8 @@ namespace path
                 }
             }
 
-            if (!cameFrom.ContainsKey(destinationNode))
+            lastQueryInfo_.nodeTraversedCount = nodeTraversedCount;
+            if (cameFrom[destinationNode] < 0)
             {
                 return path;
             }

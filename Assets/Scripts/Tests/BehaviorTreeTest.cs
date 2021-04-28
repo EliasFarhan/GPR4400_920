@@ -62,6 +62,36 @@ namespace bt
             return Status.Success;
         }
     }
+    
+    class StatusAfterCountBehavior : Behavior
+    {
+        private int counter_ = 0;
+        private int period_ = 0;
+        private Status returnReturnStatus_ = Status.Failure;
+
+        public override void Init()
+        {
+            base.Init();
+            counter_ = 0;
+        }
+
+        public StatusAfterCountBehavior(Status returnStatus, int period)
+        {
+            period_ = period;
+            returnReturnStatus_ = returnStatus;
+        }
+        
+        public override Status Update()
+        {
+            InitIfNeeded();
+            counter_++;
+            if (counter_ >= period_)
+            {
+                Status = returnReturnStatus_;
+            }
+            return counter_ < period_ ? Status.Running : returnReturnStatus_;
+        }
+    }
 }
 
 public class BehaviorTreeTest
@@ -155,6 +185,42 @@ public class BehaviorTreeTest
         repeater1.Update();
         repeater1.Update();
         Assert.AreEqual(counter.Counter, 3);
+    }
+    
+    [Test]
+    public void RepeaterUntilFailTest()
+    {
+
+        
+        var counter1 = new StatusAfterCountBehavior(Status.Success, 3);
+        var repeater1 = new RepeatUntilFail() {Child = counter1};
+        var status = repeater1.Update();
+        Assert.AreEqual(status, Status.Running);
+        status = repeater1.Update();
+        Assert.AreEqual(status, Status.Running);
+        status = repeater1.Update();
+        Assert.AreEqual(status, Status.Success);
+        status = repeater1.Update();
+        Assert.AreEqual(status, Status.Running);
+        
+        var counter2 = new StatusAfterCountBehavior(Status.Failure, 3);
+        var repeater2 = new RepeatUntilFail() {Child = counter2};
+        var status2 = repeater2.Update();
+        Assert.AreEqual(status2, Status.Running);
+        status2 = repeater2.Update();
+        Assert.AreEqual(status2, Status.Running);
+        status2 = repeater2.Update();
+        Assert.AreEqual( Status.Success, status2);
+        try
+        {
+            status2 = repeater2.Update();
+            Assert.Fail();
+        }
+        catch (BehaviorException e)
+        {
+            Assert.Pass();   
+        }
+        
     }
 
     [Test]

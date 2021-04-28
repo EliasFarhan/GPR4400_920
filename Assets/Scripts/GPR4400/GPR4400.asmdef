@@ -2,7 +2,8 @@
     "name": "GPR4400",
     "rootNamespace": "",
     "references": [
-        "PriorityQueue"
+        "PriorityQueue",
+        "Extensions"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
