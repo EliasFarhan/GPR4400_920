@@ -32,6 +32,9 @@ namespace path
         }
         
     }
+
+
+    
     /**
      * <summary>Bidirectional graph</summary> 
      */
@@ -129,6 +132,8 @@ namespace path
                     cameFrom[neighbor.neighbor] = currentNode;
                 }
             }
+            
+            
 
             lastQueryInfo_.nodeTraversedCount = nodeTraversedCount;
             if (cameFrom[destinationNode] < 0)
