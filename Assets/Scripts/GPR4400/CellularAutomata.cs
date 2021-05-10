@@ -11,13 +11,13 @@ public class CellularAutomata : MonoBehaviour
 {
     [SerializeField] private CellBehavior cellBehaviorPrefab;
 
-    private CellBehavior[,] cellViews;
-    private Cell[,] cells;
-    private Cell[,] previousCells;
+    protected CellBehavior[,] cellViews;
+    protected Cell[,] cells;
+    protected Cell[,] previousCells;
     
 
-    [SerializeField] private int width = 0;
-    [SerializeField] private int height = 0;
+    [SerializeField] protected int width = 0;
+    [SerializeField] protected int height = 0;
     private const float cellSize = 0.1f;
     [SerializeField] private int aliveToDeathConversion = 4;
     [SerializeField] private int deathToAliveConversion = 4;
@@ -27,10 +27,10 @@ public class CellularAutomata : MonoBehaviour
     [SerializeField] private int seed = 0;
     [Range(0.0f,1.0f)][SerializeField] private double randomFillFactor = 0.5;
 
-    private List<Region> regions_ = new List<Region>();
+    protected List<Region> regions_ = new List<Region>();
     [SerializeField] private int passageRadius = 1;
 
-    class Region : System.IComparable<Region>
+    public class Region : System.IComparable<Region>
     {
         private List<Vector2Int> tiles = new List<Vector2Int>();
         public List<Vector2Int> Tiles => tiles;
@@ -97,6 +97,11 @@ public class CellularAutomata : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Init();
+    }
+
+    protected virtual void Init()
+    {
         cellViews = new CellBehavior[width, height];
         cells = new Cell[width, height];
         previousCells = new Cell[width, height];
@@ -152,7 +157,7 @@ public class CellularAutomata : MonoBehaviour
         }
     }
 
-    private void ConnectClosestRegions()
+    protected virtual void ConnectClosestRegions()
     {
         foreach (var regionA in regions_)
         {
