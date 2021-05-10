@@ -54,7 +54,7 @@ namespace GPR4400
             var cameraSize = 2.0f * mainCamera.orthographicSize * new Vector2(mainCamera.aspect, 1.0f);
             var cameraRect = new Rect(){min=-cameraSize/2.0f, max = cameraSize/2.0f};
             rootNode = new BinaryNode(cameraRect);
-            SplitBinaryNode(rootNode, iteration);
+            SplitBinaryNode(rootNode, iteration>10?10:iteration, true);
         }
 
         private void Update()
@@ -88,16 +88,16 @@ namespace GPR4400
             }
         }
 
-        private void SplitBinaryNode(BinaryNode node, int remainingIteration)
+        private void SplitBinaryNode(BinaryNode node, int remainingIteration, bool horizontal)
         {
             if(remainingIteration == 0)
                 return;
             remainingIteration--;
             if (node.Children[0] == null)
-                node.Split(node.Aabb.size.x>node.Aabb.size.y,Random.Range(minRatio, maxRatio));
+                node.Split(horizontal,Random.Range(minRatio, maxRatio));
             foreach (var child in node.Children)
             {
-                SplitBinaryNode(child, remainingIteration);
+                SplitBinaryNode(child, remainingIteration, !horizontal);
             }
         }
     }

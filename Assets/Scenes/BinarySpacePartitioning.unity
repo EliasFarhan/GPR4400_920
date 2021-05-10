@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minRatio: 0.4
   maxRatio: 0.6
-  iteration: 5
+  iteration: 7
 --- !u!4 &1966044792
 Transform:
   m_ObjectHideFlags: 0

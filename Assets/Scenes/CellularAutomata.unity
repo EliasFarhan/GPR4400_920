@@ -171,9 +171,11 @@ MonoBehaviour:
   height: 100
   aliveToDeathConversion: 4
   deathToAliveConversion: 4
-  showcase: 1
-  seed: 0
-  randomFillFactor: 0.5
+  roomSurvivalThreshold: 20
+  showcase: 0
+  seed: 42
+  randomFillFactor: 0.44999998807907104
+  passageRadius: 1
 --- !u!1 &352124575
 GameObject:
   m_ObjectHideFlags: 0

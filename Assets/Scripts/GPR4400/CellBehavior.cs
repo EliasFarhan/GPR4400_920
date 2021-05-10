@@ -25,7 +25,7 @@ public class CellBehavior : MonoBehaviour
         }
     }
 
-    void UpdateColor(Color color)
+    public void UpdateColor(Color color)
     {
         spriteRenderer.color = color;
     }
