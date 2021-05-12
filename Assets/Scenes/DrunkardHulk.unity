@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &668188883
+--- !u!1 &236960039
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,53 +131,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 668188885}
-  - component: {fileID: 668188884}
+  - component: {fileID: 236960040}
+  - component: {fileID: 236960041}
   m_Layer: 0
-  m_Name: CellularAutomata
+  m_Name: DrunkardHulkGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &668188884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 668188883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7089ba8d27dd4be5892030fc61074154, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cellBehaviorPrefab: {fileID: 135371577556557885, guid: 06aef9a0e3abe11448056cb915676293, type: 3}
-  width: 64
-  height: 64
-  aliveToDeathConversion: 4
-  deathToAliveConversion: 4
-  roomSurvivalThreshold: 9
-  showcase: 0
-  seed: 42
-  randomFillFactor: 0.5
-  passageRadius: 1
-  hotPathThreshold: 10
---- !u!4 &668188885
+--- !u!4 &236960040
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 668188883}
+  m_GameObject: {fileID: 236960039}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6669219, y: -0.7659081, z: -3.2150686}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1247181089
+--- !u!114 &236960041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236960039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e236c1fca50cd459da7b1828d81abf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 5526917407330480504, guid: f080a364a33f3e14ba976f74e88bae71, type: 3}
+  width: 100
+  height: 100
+  step: 1000
+--- !u!1 &802785092
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,9 +178,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1247181092}
-  - component: {fileID: 1247181091}
-  - component: {fileID: 1247181090}
+  - component: {fileID: 802785095}
+  - component: {fileID: 802785094}
+  - component: {fileID: 802785093}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -195,21 +188,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1247181090
+--- !u!81 &802785093
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247181089}
+  m_GameObject: {fileID: 802785092}
   m_Enabled: 1
---- !u!20 &1247181091
+--- !u!20 &802785094
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247181089}
+  m_GameObject: {fileID: 802785092}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
@@ -230,7 +223,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 50
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -246,13 +239,13 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &1247181092
+--- !u!4 &802785095
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247181089}
+  m_GameObject: {fileID: 802785092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}

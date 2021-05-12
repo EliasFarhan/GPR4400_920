@@ -67,7 +67,7 @@ public class Maze : MonoBehaviour
                 var pos = new Vector2Int(x, y);
                 Vector2 worldPos = new Vector2(2.0f*x-width, 2.0f*y-height)*tileSize+Vector2.one*tileSize;
                 graph_.AddNode(pos, worldPos);
-                AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), false);
+                AddTile(worldPos, false);
             }
         }
 
@@ -107,9 +107,10 @@ public class Maze : MonoBehaviour
         }
     }
 
-    void AddTile(Tile tile, bool wall)
+    void AddTile(Vector3 worldPos, bool wall)
     {
-        tile.SpriteRenderer.color = wall?Color.black : Color.white;
+        var tile = Instantiate(tilePrefab, worldPos, Quaternion.identity, transform);
+        tile.SpriteRenderer.color = wall ? Color.black : Color.white;
         if (wall)
         {
             tile.gameObject.AddComponent<BoxCollider2D>();
@@ -118,49 +119,48 @@ public class Maze : MonoBehaviour
     }
     void InstantiateGraph()
     {
+        
         for (int x = 0; x <= width; x++)
         {
             var worldPos = new Vector2(2.0f * x - width, -height) * tileSize;
-            AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+            AddTile(worldPos, true);
             if (x != width)
             {
                 worldPos = new Vector2(2.0f * x + 1 - width, -height)* tileSize;
-                AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), 
-                    x!=0);
+                AddTile(worldPos, x!=0);
             }
 
             worldPos = new Vector2(2.0f * x  - width, height)* tileSize;
-            AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+            AddTile(worldPos, true);
             if (x != width)
             {
                 worldPos = new Vector2(2.0f * x * 1 + tileSize - width, height)* tileSize;
-                AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), 
-                    x!=width-1);
+                AddTile( worldPos, x!=width-1);
             }
         }
 
         for (int y = 1; y < height; y++)
         {
             var worldPos = new Vector2(-width, 2.0f*y-height)* tileSize;
-            AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+            AddTile( worldPos, true);
 
             worldPos = new Vector2(-width, 2.0f*y-1-height)* tileSize;
-            AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+            AddTile( worldPos, true);
             if (y == height - 1)
             {
                 worldPos = new Vector2(-width, 2.0f*y+1-height)* tileSize;
-                AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+                AddTile( worldPos, true);
             }
             
             worldPos = new Vector2(width, 2.0f*y-height)* tileSize;
-            AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+            AddTile(worldPos, true);
 
             worldPos = new Vector2(width, 2.0f*y-1-height)* tileSize;
-            AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+            AddTile( worldPos, true);
             if (y == height - 1)
             {
                 worldPos = new Vector2(width, 2.0f*y+1-height)* tileSize;
-                AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+                AddTile( worldPos, true);
             }
             
         }
@@ -170,7 +170,7 @@ public class Maze : MonoBehaviour
             for (int y = 1; y < height; y++)
             {
                 var worldPos = new Vector2(2.0f*x-width, 2.0f*y-height)* tileSize;
-                AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), true);
+                AddTile(worldPos, true);
             }
         }
 
@@ -183,16 +183,14 @@ public class Maze : MonoBehaviour
                 {
                     var rightIndex = (x + 1) * height + y;
                     var worldPos = graph_.Nodes[nodeIndex].worldPos + Vector2.right * tileSize;
-                    AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), 
-                        !graph_.AreNeighbor(nodeIndex, rightIndex));
+                    AddTile( worldPos, !graph_.AreNeighbor(nodeIndex, rightIndex));
                 }
 
                 if (y < height - 1)
                 {
                     var topIndex = x * height + y + 1;
                     var worldPos = graph_.Nodes[nodeIndex].worldPos + Vector2.up * tileSize;
-                    AddTile(Instantiate(tilePrefab, worldPos, Quaternion.identity, transform), 
-                        !graph_.AreNeighbor(nodeIndex, topIndex));
+                    AddTile( worldPos, !graph_.AreNeighbor(nodeIndex, topIndex));
                 }
             }
         }

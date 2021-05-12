@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GPR4400
 {
@@ -82,6 +84,7 @@ namespace GPR4400
 
             if (currentPos != endPoint)
             {
+                throw new Exception("No path found!");
                 return;
             }
 
@@ -150,7 +153,7 @@ namespace GPR4400
                         {
                             distanceFromPath[neighborPos.x, neighborPos.y] = cost;
                             cellViews[neighborPos.x, neighborPos.y].UpdateColor(
-                                cost < hotPathThreshold?Color.yellow : Color.gray);
+                                cost < hotPathThreshold ? Color.yellow : Color.gray);
                         }
                         nextPosition.Enqueue(neighborPos);
                     }

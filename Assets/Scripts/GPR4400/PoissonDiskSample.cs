@@ -53,6 +53,7 @@ public class PoissonDiskSample : MonoBehaviour
             Vector2Int cellPos = new Vector2Int(
                 (int) ((candidatePoint.x + cameraRect.width / 2.0f) / cellSize),
                 (int) ((candidatePoint.y + cameraRect.height / 2.0f) / cellSize));
+
             Vector2Int searchStart = new Vector2Int(Mathf.Max(0, cellPos.x - 2),
                 Mathf.Max(0, cellPos.y - 2));
             Vector2Int searchEnd = new Vector2Int(Mathf.Min(cellPos.x + 2, grid.GetLength(0) - 1),

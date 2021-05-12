@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 1
-  numSamplesBeforeRejection: 10
+  numSamplesBeforeRejection: 1
 --- !u!1 &652562228
 GameObject:
   m_ObjectHideFlags: 0

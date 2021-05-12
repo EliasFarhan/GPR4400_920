@@ -115,7 +115,8 @@ public class Voronoi : MonoBehaviour
                 Region closestRegion = null;
                 foreach (var region in regions)
                 {
-                    var distance = (region.Position - tilePos).sqrMagnitude;
+                    var delta = (region.Position - tilePos);
+                    var distance = Mathf.Abs(delta.x) + Mathf.Abs(delta.y);
                     if (distance < closestDistance || closestDistance < 0.0f)
                     {
                         closestRegion = region;

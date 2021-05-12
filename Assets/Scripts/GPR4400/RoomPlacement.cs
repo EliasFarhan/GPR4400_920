@@ -30,6 +30,9 @@ public class RoomPlacement : MonoBehaviour
                 Random.Range(cameraRect.yMin, cameraRect.yMax-size.y));
             Rect newRoom = new Rect(position, size);
             bool contact = false;
+            if(newRoom.xMin < cameraRect.xMin || newRoom.xMax > cameraRect.xMax || 
+               newRoom.yMin < cameraRect.yMin || newRoom.yMax > cameraRect.yMax)
+                continue;
             foreach (var room in rooms)
             {
                 if (room.Overlaps(newRoom))

@@ -132,6 +132,8 @@ public class CellularAutomata : MonoBehaviour
                 Iterate();
             }
             FloodFill();
+            //Cull regions that are too small
+            
             foreach (var region in regions_)
             {
                 if (region.Count < roomSurvivalThreshold)
@@ -145,6 +147,7 @@ public class CellularAutomata : MonoBehaviour
             }
 
             regions_.RemoveAll(region => region.Count < roomSurvivalThreshold);
+            
             regions_.Sort();
             regions_[0].IsMainRoom = true;
             regions_[0].ConnectedToMainRoom = true;
@@ -154,6 +157,7 @@ public class CellularAutomata : MonoBehaviour
             System.DateTime end = System.DateTime.Now;
             System.TimeSpan ts = (end - start);
             Debug.Log("Region connection Elapsed Time is "+ts.TotalMilliseconds+"ms");
+            
         }
     }
 
@@ -360,10 +364,6 @@ public class CellularAutomata : MonoBehaviour
     void FloodFill()
     {
         System.DateTime start = System.DateTime.Now;
-
-
- 
-        
         bool[,] visited = new bool[width, height];
 
         void FillRegion(int x, int y)
