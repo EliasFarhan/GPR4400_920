@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Priority_Queue;
 using UnityEngine;
 
@@ -8,12 +9,12 @@ namespace path
 {
     public struct Neighbor
     {
-        public int neighbor;
+        public int nodeIndex;
         public float length;
 
-        public Neighbor(int neighbor, float length)
+        public Neighbor(int nodeIndex, float length)
         {
-            this.neighbor = neighbor;
+            this.nodeIndex = nodeIndex;
             this.length = length;
         }
     }
@@ -79,6 +80,66 @@ namespace path
         {
             Nodes.Clear();
         }
+
+        public List<int> DijkstraAlgorithm(int startNode, int destination)
+        {
+            var path = new List<int>();
+            Dictionary<int, int> cameFrom = new Dictionary<int, int>();
+            cameFrom[startNode] = -1;
+            Dictionary<int, float> costSoFar = new Dictionary<int, float>();
+            costSoFar[startNode] = 0;
+            List<Tuple<int, float>> nextNodes = new List<Tuple<int, float>>();
+            nextNodes.Add(new Tuple<int, float>(startNode, 0.0f));
+            while (nextNodes.Count > 0)
+            {
+                var currentNode = nextNodes.First().Item1;
+                nextNodes.RemoveAt(0);
+                if (currentNode == destination)
+                    break;
+                foreach (var neighbor in nodes_[currentNode].neighbors)
+                {
+                    if (cameFrom.ContainsKey(neighbor.nodeIndex))
+                    {
+                        var cost = costSoFar[currentNode] + neighbor.length;
+                        if (cost < costSoFar[neighbor.nodeIndex])
+                        {
+                            cameFrom[neighbor.nodeIndex] = currentNode;
+                            costSoFar[neighbor.nodeIndex] = cost;
+                            int index = nextNodes.FindIndex(tuple => tuple.Item1 == neighbor.nodeIndex);
+                            var heuristicCost = cost + (nodes_[destination].position - nodes_[neighbor.nodeIndex].position)
+                                .magnitude;
+                            var tuple = new Tuple<int, float>(neighbor.nodeIndex, heuristicCost);
+                            nextNodes[index] = tuple;
+                            nextNodes.Sort(Comparer<Tuple<int, float>>.Create(
+                                (t1, t2) => t1.Item2 < t2.Item2 ? -1 : t1.Item2 > t2.Item2 ? 1 : 0));
+                        }
+                    }
+                    else
+                    {
+                        cameFrom[neighbor.nodeIndex] = currentNode;
+                        var cost = costSoFar[currentNode] + neighbor.length;
+                        costSoFar[neighbor.nodeIndex] = cost;
+                        var heuristicCost = cost + (nodes_[destination].position - nodes_[neighbor.nodeIndex].position)
+                            .magnitude;
+                        nextNodes.Add(new Tuple<int, float>(neighbor.nodeIndex, heuristicCost));
+                        nextNodes.Sort(Comparer<Tuple<int, float>>.Create(
+                            (t1, t2) => t1.Item2 < t2.Item2 ? -1 : t1.Item2 > t2.Item2 ? 1 : 0));
+                    }
+                }
+            }
+
+            if (!cameFrom.ContainsKey(destination))
+                return path;
+            int tmp = destination;
+            while (tmp != startNode)
+            {
+                path.Add(tmp);
+                tmp = cameFrom[tmp];
+            }
+            path.Add(startNode);
+            path.Reverse();
+            return path;
+        }
         /**
          * <summary>Calculate the shortest path from the startNode to the destinationNode.
          * Using A* pathfinding algorithm.</summary>
@@ -116,20 +177,20 @@ namespace path
                 foreach (var neighbor in Nodes[currentNode].neighbors)
                 {
                     var newCost = costSoFar[currentNode] + neighbor.length;
-                    if (!(costSoFar[neighbor.neighbor] < 0.0f) && 
-                        !(newCost < costSoFar[neighbor.neighbor])) continue;
-                    costSoFar[neighbor.neighbor] = newCost;
-                    var priority = newCost + (destinationPosition - Nodes[neighbor.neighbor].position).magnitude;
-                    if (frontier.Contains(neighbor.neighbor))
+                    if (!(costSoFar[neighbor.nodeIndex] < 0.0f) && 
+                        !(newCost < costSoFar[neighbor.nodeIndex])) continue;
+                    costSoFar[neighbor.nodeIndex] = newCost;
+                    var priority = newCost + (destinationPosition - Nodes[neighbor.nodeIndex].position).magnitude;
+                    if (frontier.Contains(neighbor.nodeIndex))
                     {
-                        frontier.UpdatePriority(neighbor.neighbor, priority);
+                        frontier.UpdatePriority(neighbor.nodeIndex, priority);
                     }
                     else
                     {
-                        frontier.Enqueue(neighbor.neighbor, priority);
+                        frontier.Enqueue(neighbor.nodeIndex, priority);
                     }
 
-                    cameFrom[neighbor.neighbor] = currentNode;
+                    cameFrom[neighbor.nodeIndex] = currentNode;
                 }
             }
             

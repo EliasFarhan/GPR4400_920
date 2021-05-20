@@ -18,12 +18,12 @@ public class TriangulateTest
         {
             graph.AddNeighborEdge(edge.a.index, edge.b.index, bidirectional:true);
         }
-        Assert.True(graph.Nodes[0].neighbors.Any(n => n.neighbor == 1));
-        Assert.True(graph.Nodes[0].neighbors.Any(n => n.neighbor == 2));
-        Assert.True(graph.Nodes[1].neighbors.Any(n => n.neighbor == 0));
-        Assert.True(graph.Nodes[1].neighbors.Any(n => n.neighbor == 2));
-        Assert.True(graph.Nodes[2].neighbors.Any(n => n.neighbor == 0));
-        Assert.True(graph.Nodes[2].neighbors.Any(n => n.neighbor == 1));
+        Assert.True(graph.Nodes[0].neighbors.Any(n => n.nodeIndex == 1));
+        Assert.True(graph.Nodes[0].neighbors.Any(n => n.nodeIndex == 2));
+        Assert.True(graph.Nodes[1].neighbors.Any(n => n.nodeIndex == 0));
+        Assert.True(graph.Nodes[1].neighbors.Any(n => n.nodeIndex == 2));
+        Assert.True(graph.Nodes[2].neighbors.Any(n => n.nodeIndex == 0));
+        Assert.True(graph.Nodes[2].neighbors.Any(n => n.nodeIndex == 1));
     }
     
     [Test]
@@ -40,15 +40,15 @@ public class TriangulateTest
         {
             graph.AddNeighborEdge(edge.a.index, edge.b.index, bidirectional:true);
         }
-        Assert.True(graph.Nodes[0].neighbors.Any(n => n.neighbor == 1));
-        Assert.True(graph.Nodes[0].neighbors.Any(n => n.neighbor == 2));
-        Assert.True(graph.Nodes[0].neighbors.Any(n => n.neighbor == 3));
-        Assert.True(graph.Nodes[1].neighbors.Any(n => n.neighbor == 0));
-        Assert.True(graph.Nodes[1].neighbors.Any(n => n.neighbor == 2));
-        Assert.True(graph.Nodes[1].neighbors.Any(n => n.neighbor == 3));
-        Assert.True(graph.Nodes[2].neighbors.Any(n => n.neighbor == 0));
-        Assert.True(graph.Nodes[2].neighbors.Any(n => n.neighbor == 1));
-        Assert.True(graph.Nodes[3].neighbors.Any(n => n.neighbor == 0));
-        Assert.True(graph.Nodes[3].neighbors.Any(n => n.neighbor == 1));
+        Assert.True(graph.Nodes[0].neighbors.Any(n => n.nodeIndex == 1));
+        Assert.True(graph.Nodes[0].neighbors.Any(n => n.nodeIndex == 2));
+        Assert.True(graph.Nodes[0].neighbors.Any(n => n.nodeIndex == 3));
+        Assert.True(graph.Nodes[1].neighbors.Any(n => n.nodeIndex == 0));
+        Assert.True(graph.Nodes[1].neighbors.Any(n => n.nodeIndex == 2));
+        Assert.True(graph.Nodes[1].neighbors.Any(n => n.nodeIndex == 3));
+        Assert.True(graph.Nodes[2].neighbors.Any(n => n.nodeIndex == 0));
+        Assert.True(graph.Nodes[2].neighbors.Any(n => n.nodeIndex == 1));
+        Assert.True(graph.Nodes[3].neighbors.Any(n => n.nodeIndex == 0));
+        Assert.True(graph.Nodes[3].neighbors.Any(n => n.nodeIndex == 1));
     }
 }
