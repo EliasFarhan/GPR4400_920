@@ -16,6 +16,7 @@ public class FlockingManager : MonoBehaviour
     [SerializeField] private float separationWeight = 1.5f;
     [SerializeField] private float alignWeight = 1.0f;
     [SerializeField] private float cohesionWeight = 1.0f;
+    [SerializeField] private float centerForceWeight = 3.0f;
 
     [SerializeField] private float maxSpeed = 5.0f;
     [SerializeField] private float radiusFromCenter = 10.0f;
@@ -83,7 +84,7 @@ public class FlockingManager : MonoBehaviour
             
             //Steering to world center
             currentVelocity += currentBoid.Position.magnitude > radiusFromCenter
-                ? -currentBoid.Position / (currentBoid.Position.magnitude - (radiusFromCenter-1.0f)) * Time.deltaTime
+                ? -currentBoid.Position / currentBoid.Position.magnitude * (Time.deltaTime * centerForceWeight)
                 : Vector3.zero;
 
             if (currentVelocity.sqrMagnitude > maxSpeed*maxSpeed)

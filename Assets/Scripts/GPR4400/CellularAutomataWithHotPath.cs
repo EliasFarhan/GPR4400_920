@@ -30,14 +30,14 @@ namespace GPR4400
             cellViews[startingPoint.x, startingPoint.y].IsAlive = true;
             Region startingRegion = new Region();
             startingRegion.AddTile(startingPoint);
-            regions_.Add(startingRegion);
+            Regions.Add(startingRegion);
             
             endPoint = new Vector2Int(width-1, Random.Range(0, height));
             cells[endPoint.x, endPoint.y].isAlive = true;
             cellViews[endPoint.x, endPoint.y].IsAlive = true;
             Region endRegion = new Region();
             endRegion.AddTile(endPoint);
-            regions_.Add(endRegion);
+            Regions.Add(endRegion);
             
             base.ConnectClosestRegions();
         }
